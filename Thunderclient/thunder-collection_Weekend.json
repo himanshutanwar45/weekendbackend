@@ -1,0 +1,333 @@
+{
+    "clientName": "Thunder Client",
+    "collectionName": "Weekend",
+    "collectionId": "d7577092-97e4-41a9-8592-b1a6e0b712ca",
+    "dateExported": "2024-05-16T11:32:21.517Z",
+    "version": "1.2",
+    "folders": [
+        {
+            "_id": "9170bd19-3f7d-4051-8544-d52045e6bf5c",
+            "name": "CreateUser",
+            "containerId": "",
+            "created": "2024-04-29T05:35:42.335Z",
+            "sortNum": 10000
+        },
+        {
+            "_id": "fb5b2688-f0f8-4391-947e-1e54ddd9f481",
+            "name": "Weekend",
+            "containerId": "",
+            "created": "2024-04-29T09:01:43.387Z",
+            "sortNum": 30000
+        }
+    ],
+    "requests": [
+        {
+            "_id": "3dbc5621-6139-41f5-8569-c3c598703397",
+            "colId": "d7577092-97e4-41a9-8592-b1a6e0b712ca",
+            "containerId": "9170bd19-3f7d-4051-8544-d52045e6bf5c",
+            "name": "Create User",
+            "url": "http://localhost:5000/api/auth/create_user",
+            "method": "POST",
+            "sortNum": 10000,
+            "created": "2024-04-29T05:35:50.980Z",
+            "modified": "2024-05-13T10:04:01.994Z",
+            "headers": [
+                {
+                    "name": "auth-token",
+                    "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjYzMWQ5ZDEyYTk1NDU4YTA5M2FlODAxIn0sImlhdCI6MTcxNTMzNDQ2Mn0.0rqvL8Kr-nwIVOCqkfNw_w4Zc0pKMKzGaGKiA4VD4mo"
+                }
+            ],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"empCode\":\"IPL166\",\n  \"empName\":\"Aviral Saxena\",\n  \"email\":\"aviral.saxena@invia.co.in\",\n  \"mobile\":\"123456\",\n  \"isAdmin\":\"0\",\n  \"password\":\"1234\",\n  \"status\":\"1\"\n}",
+                "form": []
+            }
+        },
+        {
+            "_id": "15d2d357-26cc-46c1-b1ee-0587f06cdb86",
+            "colId": "d7577092-97e4-41a9-8592-b1a6e0b712ca",
+            "containerId": "9170bd19-3f7d-4051-8544-d52045e6bf5c",
+            "name": "Login User",
+            "url": "http://localhost:5000/api/auth/login",
+            "method": "POST",
+            "sortNum": 20000,
+            "created": "2024-04-29T06:37:29.670Z",
+            "modified": "2024-05-16T06:00:30.865Z",
+            "headers": [
+                {
+                    "name": "Content-Type",
+                    "value": "application/json"
+                }
+            ],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"email\":\"himanshu.tanwar@invia.co.in\",\n  \"password\":\"1234\"\n}",
+                "form": []
+            }
+        },
+        {
+            "_id": "308426b8-358b-4275-a73c-b1c7433bd5cb",
+            "colId": "d7577092-97e4-41a9-8592-b1a6e0b712ca",
+            "containerId": "fb5b2688-f0f8-4391-947e-1e54ddd9f481",
+            "name": "Weekend",
+            "url": "http://localhost:5000/api/weekend/addweekend",
+            "method": "POST",
+            "sortNum": 30000,
+            "created": "2024-04-29T09:01:47.889Z",
+            "modified": "2024-05-01T08:51:15.983Z",
+            "headers": [
+                {
+                    "name": "auth-token",
+                    "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjYzMWQ5ZDEyYTk1NDU4YTA5M2FlODAxIn0sImlhdCI6MTcxNDU0MzM1MH0.8arow0nhun57XI8Gr4xn7npkH-apEcbX9VknwP0JCzU"
+                }
+            ],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"empCode\":\"IPL059\",\n  \"empName\":\"Roshan Shah\",\n  \"monthYear\":\"04-2024\",\n  \"date\":\"2024-04-19\",\n  \"createdBy\":\"1\"\n}",
+                "form": []
+            }
+        },
+        {
+            "_id": "02b94627-c674-4976-b28c-4f88a4fa52b7",
+            "colId": "d7577092-97e4-41a9-8592-b1a6e0b712ca",
+            "containerId": "fb5b2688-f0f8-4391-947e-1e54ddd9f481",
+            "name": "Get Worked Employee",
+            "url": "http://localhost:5000/api/weekend/workedemployee",
+            "method": "POST",
+            "sortNum": 40000,
+            "created": "2024-05-01T08:40:25.241Z",
+            "modified": "2024-05-02T10:35:00.436Z",
+            "headers": [
+                {
+                    "name": "auth-token",
+                    "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjYzMWQ5ZDEyYTk1NDU4YTA5M2FlODAxIn0sImlhdCI6MTcxNDU0MzM1MH0.8arow0nhun57XI8Gr4xn7npkH-apEcbX9VknwP0JCzU"
+                },
+                {
+                    "name": "Content-Type",
+                    "value": "application/json"
+                }
+            ],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"monthYear\":\"04-2024\"\n}",
+                "form": []
+            }
+        },
+        {
+            "_id": "6763ac55-2090-485f-9214-0189d6377718",
+            "colId": "d7577092-97e4-41a9-8592-b1a6e0b712ca",
+            "containerId": "fb5b2688-f0f8-4391-947e-1e54ddd9f481",
+            "name": "Add Pending Entry",
+            "url": "http://localhost:5000/api/weekend/creatependingweekendentry",
+            "method": "POST",
+            "sortNum": 50000,
+            "created": "2024-05-01T08:53:41.312Z",
+            "modified": "2024-05-10T09:47:49.965Z",
+            "headers": [
+                {
+                    "name": "auth-token",
+                    "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjYzMWQ5ZDEyYTk1NDU4YTA5M2FlODAxIn0sImlhdCI6MTcxNTMzNDQ2Mn0.0rqvL8Kr-nwIVOCqkfNw_w4Zc0pKMKzGaGKiA4VD4mo"
+                },
+                {
+                    "name": "Content-Type",
+                    "value": "application/json"
+                }
+            ],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"monthYear\":\"2024-05\"\n}",
+                "form": []
+            }
+        },
+        {
+            "_id": "47d576f5-1a93-4960-9e7e-ba8fa528887c",
+            "colId": "d7577092-97e4-41a9-8592-b1a6e0b712ca",
+            "containerId": "fb5b2688-f0f8-4391-947e-1e54ddd9f481",
+            "name": "Get Pending Employee",
+            "url": "http://localhost:5000/api/weekend/pendingemployee",
+            "method": "POST",
+            "sortNum": 70000,
+            "created": "2024-05-03T08:13:51.075Z",
+            "modified": "2024-05-03T09:34:04.054Z",
+            "headers": [
+                {
+                    "name": "auth-Token",
+                    "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjYzMWQ5ZDEyYTk1NDU4YTA5M2FlODAxIn0sImlhdCI6MTcxNDU0MzM1MH0.8arow0nhun57XI8Gr4xn7npkH-apEcbX9VknwP0JCzU"
+                },
+                {
+                    "name": "Content-Type",
+                    "value": "application/json"
+                }
+            ],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"monthYear\":\"2024-05\"\n}",
+                "form": []
+            }
+        },
+        {
+            "_id": "29c7cdd2-f662-4d37-bcee-796ef4272d80",
+            "colId": "d7577092-97e4-41a9-8592-b1a6e0b712ca",
+            "containerId": "fb5b2688-f0f8-4391-947e-1e54ddd9f481",
+            "name": "UpdatePendingEntry",
+            "url": "http://localhost:5000/api/weekend/updateentry/66399bfebde1d7f95ee41add",
+            "method": "PUT",
+            "sortNum": 80000,
+            "created": "2024-05-06T06:17:13.214Z",
+            "modified": "2024-05-07T03:16:35.378Z",
+            "headers": [
+                {
+                    "name": "auth-token",
+                    "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjYzMWQ5ZDEyYTk1NDU4YTA5M2FlODAxIn0sImlhdCI6MTcxNDk3NjE1OX0.0uopaOISIovFJ8PnxpfJohRJzdY2mO1z3ryUjagI74Q"
+                },
+                {
+                    "name": "Content-Type",
+                    "value": "application/json"
+                }
+            ],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"empCode\":\"IPL107\",\n  \"empName\":\"Chandan Kumar\",\n  \"date\":\"2024-05-05\"\n}",
+                "form": []
+            }
+        },
+        {
+            "_id": "17eeacec-a5f8-43e9-ac10-7b322a7e25bd",
+            "colId": "d7577092-97e4-41a9-8592-b1a6e0b712ca",
+            "containerId": "9170bd19-3f7d-4051-8544-d52045e6bf5c",
+            "name": "EmployeeName",
+            "url": "http://localhost:5000/api/auth/employeename",
+            "method": "POST",
+            "sortNum": 90000,
+            "created": "2024-05-06T06:27:16.137Z",
+            "modified": "2024-05-06T06:30:40.134Z",
+            "headers": [
+                {
+                    "name": "auth-token",
+                    "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjYzMWQ5ZDEyYTk1NDU4YTA5M2FlODAxIn0sImlhdCI6MTcxNDk3NjE1OX0.0uopaOISIovFJ8PnxpfJohRJzdY2mO1z3ryUjagI74Q"
+                },
+                {
+                    "name": "Content-Type",
+                    "value": "application/json"
+                }
+            ],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"empCode\":\"IPL044\"\n}",
+                "form": []
+            }
+        },
+        {
+            "_id": "679a5965-dd5f-4127-9a5a-d91d2b2fe348",
+            "colId": "d7577092-97e4-41a9-8592-b1a6e0b712ca",
+            "containerId": "9170bd19-3f7d-4051-8544-d52045e6bf5c",
+            "name": "EmployeeCode",
+            "url": "http://localhost:5000/api/auth/employeecode",
+            "method": "POST",
+            "sortNum": 100000,
+            "created": "2024-05-06T06:31:41.167Z",
+            "modified": "2024-05-06T06:32:23.068Z",
+            "headers": [
+                {
+                    "name": "auth-token",
+                    "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjYzMWQ5ZDEyYTk1NDU4YTA5M2FlODAxIn0sImlhdCI6MTcxNDk3NjE1OX0.0uopaOISIovFJ8PnxpfJohRJzdY2mO1z3ryUjagI74Q"
+                },
+                {
+                    "name": "Content-Type",
+                    "value": "application/json"
+                }
+            ],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"empName\":\"Roshan Shah\"\n}",
+                "form": []
+            }
+        },
+        {
+            "_id": "de0574f9-af2c-411d-ae2f-c46247dc7681",
+            "colId": "d7577092-97e4-41a9-8592-b1a6e0b712ca",
+            "containerId": "fb5b2688-f0f8-4391-947e-1e54ddd9f481",
+            "name": "Update Auto Entry",
+            "url": "http://localhost:5000/api/weekend/addAutoEntry",
+            "method": "POST",
+            "sortNum": 110000,
+            "created": "2024-05-07T06:52:45.108Z",
+            "modified": "2024-05-07T06:56:10.416Z",
+            "headers": [
+                {
+                    "name": "auth-token",
+                    "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjYzMWQ5ZDEyYTk1NDU4YTA5M2FlODAxIn0sImlhdCI6MTcxNDk3NjE1OX0.0uopaOISIovFJ8PnxpfJohRJzdY2mO1z3ryUjagI74Q"
+                },
+                {
+                    "name": "Content-Type",
+                    "value": "application/json"
+                }
+            ]
+        },
+        {
+            "_id": "c93938ce-3af4-4ab6-8782-ba4e2905d287",
+            "colId": "d7577092-97e4-41a9-8592-b1a6e0b712ca",
+            "containerId": "9170bd19-3f7d-4051-8544-d52045e6bf5c",
+            "name": "Create Admin User",
+            "url": "http://localhost:5000/api/auth/createadmin",
+            "method": "POST",
+            "sortNum": 120000,
+            "created": "2024-05-14T06:03:21.779Z",
+            "modified": "2024-05-14T06:04:29.965Z",
+            "headers": [
+                {
+                    "name": "Content-Type",
+                    "value": "application/json"
+                }
+            ]
+        },
+        {
+            "_id": "87eeca06-340d-45d6-a33a-fa42e225208d",
+            "colId": "d7577092-97e4-41a9-8592-b1a6e0b712ca",
+            "containerId": "9170bd19-3f7d-4051-8544-d52045e6bf5c",
+            "name": "Update Users",
+            "url": "http://localhost:5000/api/auth/updateuser/664302fc366c461257487cac",
+            "method": "PUT",
+            "sortNum": 130000,
+            "created": "2024-05-15T03:32:08.585Z",
+            "modified": "2024-05-16T10:52:22.533Z",
+            "headers": [
+                {
+                    "name": "Content-Type",
+                    "value": "application/json"
+                },
+                {
+                    "name": "auth-token",
+                    "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjYzMWQ5ZDEyYTk1NDU4YTA5M2FlODAxIn0sImlhdCI6MTcxNTMzNDQ2Mn0.0rqvL8Kr-nwIVOCqkfNw_w4Zc0pKMKzGaGKiA4VD4mo"
+                }
+            ],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"eempName\":\"Himanshu Tanwar\",\n  \"eemail\":\"himanshu.tanwar@invia.co.in\",\n  \"emobile\":\"9716635288\",\n  \"eisAdmin\":\"true\",\n  \"epassword\":\"1234\",\n  \"estatus\":\"true\"\n}",
+                "form": []
+            }
+        },
+        {
+            "_id": "0e45bc7d-53e8-4a3d-ac8f-efee08d2e496",
+            "colId": "d7577092-97e4-41a9-8592-b1a6e0b712ca",
+            "containerId": "9170bd19-3f7d-4051-8544-d52045e6bf5c",
+            "name": "Get All Employee From Id",
+            "url": "http://localhost:5000/api/auth/allemployeId/664302fc366c461257487cac",
+            "method": "GET",
+            "sortNum": 140000,
+            "created": "2024-05-15T06:41:40.861Z",
+            "modified": "2024-05-15T06:42:27.539Z",
+            "headers": [
+                {
+                    "name": "Content-Type",
+                    "value": "application/json"
+                },
+                {
+                    "name": "auth-token",
+                    "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjYzMWQ5ZDEyYTk1NDU4YTA5M2FlODAxIn0sImlhdCI6MTcxNTMzNDQ2Mn0.0rqvL8Kr-nwIVOCqkfNw_w4Zc0pKMKzGaGKiA4VD4mo"
+                }
+            ]
+        }
+    ],
+    "ref": "EEvA2O6p3EbDR9RptGIxw7wz_qLXXix0A15bUcQloqBAADk6SVCnUsk9A1QzD8oedOS--J_1kogCo_h02fk5tg"
+}
