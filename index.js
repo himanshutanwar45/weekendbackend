@@ -24,18 +24,18 @@ app.listen(port, () => {
     console.log(`Weekend Support app listening on port ${port}`)
 })
 
-// const autoEntry = async () => {
-//     try {
-//         const response = await fetch(`${url}/api/weekend/addAutoEntry`, {
-//             method: 'POST',
-//             headers: {
-//                 'Content-Type': 'application/json' 
-//             }
-//         });
-//         const data = await response.json();
-//     } catch (error) {
-//         throw error.message
-//     }
-// }
+const autoEntry = async () => {
+    try {
+        const response = await fetch(`${url}/api/weekend/addAutoEntry`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json' 
+            }
+        });
+        const data = await response.json();
+    } catch (error) {
+        throw error.message
+    }
+}
 
-// autoEntry()
+autoEntry()
