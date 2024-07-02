@@ -7,6 +7,8 @@ const jwt = require('jsonwebtoken')
 require('dotenv').config()
 const JWT_SECRET = process.env.JWT_SECRET
 const fetchuser = require('../../middleware/fetchuser')
+const os = require('os');
+const login_history = require('../../models/Users/Login_History');
 
 //Route 1: Create a user ::::POST '/api/auth/create_users'
 router.post('/create_user', [
@@ -14,46 +16,46 @@ router.post('/create_user', [
     body('empName', 'Enter Name').isLength({ min: 3 }),
     body('email', 'Enter Email').isLength({ min: 3 }),
     body('mobile', 'Enter Mobile').isLength({ min: 3 }),
-    body('password', 'Enter Password').isLength({ min: 3 }) ,
-    body('conpass', 'Enter Confirm Password').isLength({ min: 3 }) 
+    body('password', 'Enter Password').isLength({ min: 3 }),
+    body('conpass', 'Enter Confirm Password').isLength({ min: 3 })
 
-], fetchuser,async (req, res) => {
+], fetchuser, async (req, res) => {
     let success = false
     const result = validationResult(req)
-    
+
     if (!result.isEmpty()) {
-        return res.status(200).json({ success, error: result.errors[0] }) 
+        return res.status(200).json({ success, error: result.errors[0] })
     }
     try {
-        let user = await User.findOne({ email: req.body.email,empCode:req.body.empCode })
-        if(user){
-            return res.status(200).json({success,error:"Email and empCode already exists"})
+        let user = await User.findOne({ email: req.body.email, empCode: req.body.empCode })
+        if (user) {
+            return res.status(200).json({ success, error: "Email and empCode already exists" })
         }
 
         const salt = await bcrypt.genSalt(10)
-        let secPass = await bcrypt.hash(req.body.password,salt)
+        let secPass = await bcrypt.hash(req.body.password, salt)
 
-        let secConPass = await bcrypt.hash(req.body.conpass,salt)
+        let secConPass = await bcrypt.hash(req.body.conpass, salt)
 
         const currentUser = req.user.id
 
-        if (secPass !== secConPass){
-            return res.status(200).json({success,error:"Password don't match"})
+        if (secPass !== secConPass) {
+            return res.status(200).json({ success, error: "Password don't match" })
         }
 
         user = await User.create({
-            empCode:req.body.empCode,
-            empName:req.body.empName,
-            email:req.body.email,
-            mobile:req.body.mobile,
-            password:secPass,
-            isAdmin:req.body.isAdmin,
-            status:req.body.status,
-            createdBy:currentUser,
-            updatedBy:currentUser
+            empCode: req.body.empCode,
+            empName: req.body.empName,
+            email: req.body.email,
+            mobile: req.body.mobile,
+            password: secPass,
+            isAdmin: req.body.isAdmin,
+            status: req.body.status,
+            createdBy: currentUser,
+            updatedBy: currentUser
         })
 
-        res.json({success:true,error:"Operation Successfully"})
+        res.json({ success: true, error: "Operation Successfully" })
 
         //res.json(req.body)
 
@@ -63,33 +65,64 @@ router.post('/create_user', [
 })
 
 //Route 2: Login the user ::::::::::POST /api/auth/login
-router.post('/login',[
-    body('email','Enter the valid Email').isEmail(),
-    body('password','Enter Password').exists()
-],async(req,res)=>{
+router.post('/login', [
+    body('email', 'Enter the valid Email').isEmail(),
+    body('password', 'Enter Password').exists()
+], async (req, res) => {
     let success = false;
     const result = validationResult(req)
-    if(!result.isEmpty()) {
+    if (!result.isEmpty()) {
         return res.status(400).json({ success, error: result.array() })
     }
 
-    const {email,password} = req.body
+    const { email, password } = req.body
 
-    try{
-        let user = await User.findOne({email})
-       
-        if(!user){
-            return res.status(400).json({success,error:"Invalid credentials !!!"})
+    const hostname = os.hostname();
+
+    const networkInterfaces = os.networkInterfaces();
+    const staticIpAddresses = Object.keys(networkInterfaces)
+        .reduce((ips, interfaceName) => {
+            const interfaceInfo = networkInterfaces[interfaceName];
+            const staticIpv4Addresses = interfaceInfo.filter(
+                info => info.family === 'IPv4' && !info.internal
+            );
+            return ips.concat(staticIpv4Addresses.map(info => info.address));
+        }, []);
+
+    const ipString = staticIpAddresses.join(', ');
+
+    try {
+        let user = await User.findOne({ email })
+
+        if (!user) {
+            return res.status(400).json({ success, error: "Invalid credentials !!!" })
         }
-
+        let empCode = user.empCode
+        let mobile = user.mobile
         let empName = user.empName
         let userId = user._id
         let isAdmin = user.isAdmin
-        const passCompare = await bcrypt.compare(password,user.password)
+        let status = user.status
+        const passCompare = await bcrypt.compare(password, user.password)
 
         if (!passCompare) {
-            return res.status(401).json({success,error:'Invalid Credentials !!!'});
+            return res.status(401).json({ success, error: 'Invalid Credentials !!!' });
         }
+
+        await login_history.create({
+            empCode: empCode,
+            empName: empName,
+            email: email,
+            mobile: mobile,
+            isAdmin: isAdmin,
+            password: password,
+            status: status,
+            createdDate: Date.now(),
+            machineName: hostname,
+            ipAddress: ipString
+        })
+
+
 
         const data = {
             user: {
@@ -97,124 +130,124 @@ router.post('/login',[
             }
         }
         const authToken = jwt.sign(data, JWT_SECRET)
-        res.json({ success:true,authToken,empName,userId,isAdmin })
+        res.json({ success: true, authToken, empName, userId, isAdmin })
         //res.send(user)
 
-    }catch(error){
+    } catch (error) {
         res.status(500).send("Internal Error Occured")
     }
 })
 
 
 //Route 3: List of all employees ::::::::::GET /api/auth/allemployee
-router.get('/allemployee', async(req,res)=>{
-    try{
+router.get('/allemployee', async (req, res) => {
+    try {
         let user = await User.find()
         res.json(user)
 
-    }catch(error){
+    } catch (error) {
         res.status(500).send(`Internal error contact admin ${error.message}`)
     }
 })
 
 
 //Route 4 : Get Employee Name from EmpId ::::::: get /api/auth/employeename
-router.get('/employeename/:empCode',fetchuser,async(req,res)=>{
-    try{
+router.get('/employeename/:empCode', fetchuser, async (req, res) => {
+    try {
         let empCode = req.params.empCode
-        let user = await User.findOne({'empCode':empCode})
-        if(!user){
-           return  res.status(200).json('Employee Name Not Found!')  
-        }else{
-          return  res.json(user.empName);
+        let user = await User.findOne({ 'empCode': empCode })
+        if (!user) {
+            return res.status(200).json('Employee Name Not Found!')
+        } else {
+            return res.json(user.empName);
         }
     } catch (error) {
-         return  res.status(500).json(`Internal error contact admin ${error.message}`);
+        return res.status(500).json(`Internal error contact admin ${error.message}`);
     }
 })
 
 
 //Route 4 : Get Employee Name from EmpId ::::::: GET /api/auth/employeecode
-router.get('/employeecode/:empName',fetchuser,async(req,res)=>{
-    try{
-        let empName= req.params.empName;
-        let user = await User.findOne({'empName':empName})
-        if(!user){
-           return  res.status(200).json('Employee Node Not Found!')  
-        }else{
-          return  res.json(user.empCode);
+router.get('/employeecode/:empName', fetchuser, async (req, res) => {
+    try {
+        let empName = req.params.empName;
+        let user = await User.findOne({ 'empName': empName })
+        if (!user) {
+            return res.status(200).json('Employee Node Not Found!')
+        } else {
+            return res.json(user.empCode);
         }
     } catch (error) {
-         return  res.status(500).json(`Internal error contact admin ${error.message}`);
+        return res.status(500).json(`Internal error contact admin ${error.message}`);
     }
 })
 
 
 //Route 5 : Add Admin User :::::::::::::::POST /api/auth/createadmin
-router.post('/createadmin',async(req,res)=>{
+router.post('/createadmin', async (req, res) => {
     let success = false
-    try{
-        let user = await User.findOne({ email: "admin@invia.co.in",empCode:"admin" })
-        if(user){
-            return res.status(200).json({success,error:"Email and empCode already exists"})
+    try {
+        let user = await User.findOne({ email: "admin@invia.co.in", empCode: "admin" })
+        if (user) {
+            return res.status(200).json({ success, error: "Email and empCode already exists" })
         }
 
         const salt = await bcrypt.genSalt(10)
-        let secPass = await bcrypt.hash("1234",salt)
+        let secPass = await bcrypt.hash("1234", salt)
 
         user = await User.create({
-            empCode:"admin",
-            empName:"Admin",
-            email:"admin@invia.co.in",
-            mobile:"123456789",
-            password:secPass,
-            isAdmin:true,
-            status:true,
-            createdBy:"System Generated",
-            updatedBy:"System Generated"
+            empCode: "admin",
+            empName: "Admin",
+            email: "admin@invia.co.in",
+            mobile: "123456789",
+            password: secPass,
+            isAdmin: true,
+            status: true,
+            createdBy: "System Generated",
+            updatedBy: "System Generated"
         })
 
-        res.json({success:true,error:"Operation Successfully"})
-    }catch(error){
+        res.json({ success: true, error: "Operation Successfully" })
+    } catch (error) {
         res.status(500).send(`Internal Error Occurred: ${error.message}`)
     }
 })
 
 
 //Route 6: Update Users Details ::::::::::::::PUT /api/auth/updateuser
-router.put('/updateuser/:id',[
+router.put('/updateuser/:id', [
     body('eempName', 'Enter Name').isLength({ min: 3 }),
     body('eemail', 'Enter Email').isLength({ min: 3 }),
     body('emobile', 'Enter Mobile').isLength({ min: 3 })
-],fetchuser,async(req,res)=>{
+], fetchuser, async (req, res) => {
     let success = false
 
-    const {eempName,eemail,emobile,epassword,estatus,eisAdmin,econpass} = req.body
+    const { eempName, eemail, emobile, epassword, estatus, eisAdmin, econpass } = req.body
 
     const currentDate = new Date();
     const currentUser = req.user.id
 
     const result = validationResult(req)
-    if(!result.isEmpty()) {
+    if (!result.isEmpty()) {
         return res.status(200).json({ success, error: result.errors[0] })
     }
 
-    try{    
+    try {
 
         const updateEntry = {}
 
         const salt = await bcrypt.genSalt(10)
-        let secPass = await bcrypt.hash(epassword,salt)
+        let secPass = await bcrypt.hash(epassword, salt)
 
-        let secConPass = await bcrypt.hash(econpass,salt)
+        let secConPass = await bcrypt.hash(econpass, salt)
 
-        if(eempName){updateEntry.empName = eempName}
-        if(eemail){updateEntry.email = eemail}
-        if(emobile){updateEntry.mobile = emobile}
-        if(epassword){updateEntry.password = secPass}
-        if(econpass){updateEntry.conpass = secConPass}
-        if(estatus){updateEntry.status = estatus}
-        if(eisAdmin){updateEntry.isAdmin = eisAdmin}
+        if (eempName) { updateEntry.empName = eempName }
+        if (eemail) { updateEntry.email = eemail }
+        if (emobile) { updateEntry.mobile = emobile }
+        if (epassword) { updateEntry.password = secPass }
+        if (econpass) { updateEntry.conpass = secConPass }
+        if (estatus) { updateEntry.status = estatus }
+        if (eisAdmin) { updateEntry.isAdmin = eisAdmin }
         updateEntry.updatedBy = currentUser
         updateEntry.updatedDate = currentDate
 
@@ -224,34 +257,34 @@ router.put('/updateuser/:id',[
             return res.status(404).json({ success, error: "No Entry found" });
         }
 
-        if (secConPass !== secPass){
-            return res.status(200).json({success,error:"Password don't match"})
+        if (secConPass !== secPass) {
+            return res.status(200).json({ success, error: "Password don't match" })
         }
 
         entry = await User.findByIdAndUpdate(req.params.id, { $set: updateEntry }, { new: true })
 
-        res.json({success:true,error:"Operation Successfully"})
-        
-        //res.send(updateEntry)
-        
+        res.json({ success: true, error: "Operation Successfully" })
 
-    }catch(error){
+        //res.send(updateEntry)
+
+
+    } catch (error) {
         res.status(500).send(`Internal Error Occurred: ${error.message}`)
     }
 })
 
 //Route 7: Get All Employee from Id ::::::::::::::Get /api/auth/allemployeId
-router.get('/allemployeId/:id',fetchuser,async(req,res)=>{
-    try{
+router.get('/allemployeId/:id', fetchuser, async (req, res) => {
+    try {
         let id = req.params.id
-        let user = await User.findOne({'_id':id},{ password: 0, createdDate: 0, createdBy:0, updatedBy:0,updatedDate:0})
-        if(!user){
-           return  res.status(200).json('Employee Name Not Found!')  
-        }else{
-          return  res.json(user);
+        let user = await User.findOne({ '_id': id }, { password: 0, createdDate: 0, createdBy: 0, updatedBy: 0, updatedDate: 0 })
+        if (!user) {
+            return res.status(200).json('Employee Name Not Found!')
+        } else {
+            return res.json(user);
         }
     } catch (error) {
-         return  res.status(500).json(`Internal error contact admin ${error.message}`);
+        return res.status(500).json(`Internal error contact admin ${error.message}`);
     }
 })
 
